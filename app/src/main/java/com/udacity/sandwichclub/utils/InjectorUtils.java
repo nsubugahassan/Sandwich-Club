@@ -1,32 +1,22 @@
 package com.udacity.sandwichclub.utils;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.udacity.sandwichclub.R;
 import com.udacity.sandwichclub.data.Repository;
-import com.udacity.sandwichclub.model.Sandwich;
 import com.udacity.sandwichclub.viewmodel.DetailsActivityViewModelFactory;
 
 public class InjectorUtils {
 
-    private static final String LOG_TAG = InjectorUtils.class.getSimpleName();
-
-    public static Repository provideRepository(Context context, int position){
+    public static Repository provideRepository(Context context) {
         String[] sandwiches = context.getApplicationContext().getResources().getStringArray(R
                 .array.sandwich_details);
-        String json = sandwiches[position];
-        Sandwich sandwich = JsonUtils.parseSandwichJson(json);
-
-//        Log.d(LOG_TAG, "the sandwich title is: " + sandwich.getMainName() + " " + sandwich
-//                .getDescription());
-
-        return Repository.getsInstance(sandwich);
+        return Repository.getsInstance(sandwiches);
     }
 
-    public static DetailsActivityViewModelFactory provideDetailsActivityViewModelFactory(Context context, int position){
+    public static DetailsActivityViewModelFactory provideDetailsActivityViewModelFactory(Context context) {
 
-        Repository repository = provideRepository(context,position);
+        Repository repository = provideRepository(context);
 
         return new DetailsActivityViewModelFactory(repository);
 

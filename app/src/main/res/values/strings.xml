@@ -128,4 +128,6 @@
         </item>
     </string-array>
 
+    <string name="data_not_available">Data not available</string>
+
 </resources>

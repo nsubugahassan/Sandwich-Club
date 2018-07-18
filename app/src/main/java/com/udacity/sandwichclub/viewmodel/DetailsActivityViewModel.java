@@ -13,13 +13,10 @@ public class DetailsActivityViewModel extends ViewModel{
 
     public DetailsActivityViewModel(Repository repository) {
         mRepository = repository;
-        mSandwich = mRepository.getSandwich();
-
     }
 
-    public Sandwich getmSandwich(){
-        Log.d(LOG_TAG, "the sandwich title is: " + mSandwich.getMainName() + " " + mSandwich
-                .getDescription());
+    public Sandwich getmSandwich(int position){
+        mSandwich = mRepository.getSandwich(position);
         return mSandwich;
     }
 

@@ -1,5 +1,6 @@
 package com.udacity.sandwichclub.utils;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.udacity.sandwichclub.model.Sandwich;
@@ -14,25 +15,35 @@ import java.util.List;
 public class JsonUtils {
 
     private static final String LOG_TAG = JsonUtils.class.getSimpleName();
+    private static final String NAME = "name";
+    private static final String SANDWICH_MAIN_NAME = "mainName";
+    private static final String SANDWICH_ALSO_KNOWN_AS = "alsoKnownAs";
+    private static final String SANDWICH_PLACE_OF_ORIGIN = "placeOfOrigin";
+    private static final String SANDWICH_DESCRIPTION = "description";
+    private static final String SANDWICH_IMAGE = "image";
+    private static final String SANDWICH_INGREDIENTS = "ingredients";
+    public static final String data_not_available = "Data not available";
+
 
     public static Sandwich parseSandwichJson(String json) {
-        Log.d(LOG_TAG, "The Json string is: " + json);
 
         Sandwich sandwich;
 
         try {
             JSONObject sandwichJsonObject = new JSONObject(json);
-            JSONObject nameJsonObject = sandwichJsonObject.getJSONObject("name");
-            String mainName = nameJsonObject.getString("mainName");
+            JSONObject nameJsonObject = sandwichJsonObject.optJSONObject(NAME);
+
+            String mainName = nameJsonObject.optString(SANDWICH_MAIN_NAME,data_not_available);
 
             List<String> otherSandwichNames = getOtherNamesFromJsonArray(nameJsonObject
-                    .getJSONArray("alsoKnownAs"));
-            String placeOfOrigin = sandwichJsonObject.getString("placeOfOrigin");
-            String description = sandwichJsonObject.getString("description");
-            String imageUrl = sandwichJsonObject.getString("image");
+                    .getJSONArray(SANDWICH_ALSO_KNOWN_AS));
+
+            String placeOfOrigin = sandwichJsonObject.optString(SANDWICH_PLACE_OF_ORIGIN,data_not_available);
+            String description = sandwichJsonObject.optString(SANDWICH_DESCRIPTION,data_not_available);
+            String imageUrl = sandwichJsonObject.optString(SANDWICH_IMAGE,data_not_available);
 
             List<String> ingredientsList = getIngredientsList(sandwichJsonObject.getJSONArray
-                    ("ingredients"));
+                    (SANDWICH_INGREDIENTS));
 
             sandwich = new Sandwich(mainName,otherSandwichNames,placeOfOrigin,description,
                     imageUrl,ingredientsList);
@@ -90,10 +101,7 @@ public class JsonUtils {
         String extractedItems = "";
         if (stringList != null && stringList.size() > 0){
            for (int i=0; i < stringList.size(); i++){
-              extractedItems = extractedItems + stringList.get(i);
-              if (i != stringList.size() - 1){
-                  extractedItems = extractedItems + ", ";
-              }
+                extractedItems = TextUtils.join(", ",stringList);
            }
            return extractedItems;
         }else {
